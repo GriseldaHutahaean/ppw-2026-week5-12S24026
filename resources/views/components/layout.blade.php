@@ -10,9 +10,14 @@
         <aside class="hidden bg-forest text-white lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
             <div class="flex h-full flex-col px-7 py-8">
                 <a href="{{ route('bukus.index') }}" class="group border-b border-white/15 pb-8">
-                    <span class="text-xs font-semibold uppercase tracking-[0.24em] text-brass">Perpustakaan Del</span>
-                    <span class="mt-3 block font-display text-3xl font-semibold tracking-tight text-white">SIPUS-Del</span>
-                    <span class="mt-3 block max-w-52 text-sm leading-6 text-white/65">Sistem Informasi Perpustakaan Del</span>
+                    <div class="flex items-start gap-4">
+                        <img src="{{ asset('images/logo-itdel.png') }}" alt="Logo Institut Teknologi Del" class="h-16 w-16 shrink-0 rounded-md bg-white object-contain p-1">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Perpustakaan Del</span>
+                            <span class="mt-2 block font-display text-3xl font-semibold tracking-tight text-white">SIPUS-Del</span>
+                            <span class="mt-2 block max-w-44 text-sm leading-6 text-white/65">Sistem Informasi Perpustakaan Del</span>
+                        </div>
+                    </div>
                 </a>
 
                 <nav class="mt-10 space-y-2" aria-label="Navigasi utama">
@@ -43,7 +48,10 @@
         <div class="lg:ml-72">
             <header class="border-b border-forest/15 bg-forest text-white lg:hidden">
                 <div class="flex items-center justify-between gap-4 px-5 py-4">
-                    <a href="{{ route('bukus.index') }}" class="font-display text-2xl font-semibold text-white">SIPUS-Del</a>
+                    <a href="{{ route('bukus.index') }}" class="flex items-center gap-3 font-display text-2xl font-semibold text-white">
+                        <img src="{{ asset('images/logo-itdel.png') }}" alt="Logo Institut Teknologi Del" class="h-10 w-10 rounded bg-white object-contain p-0.5">
+                        <span>SIPUS-Del</span>
+                    </a>
                     <nav class="flex gap-1" aria-label="Navigasi utama">
                         <a href="{{ route('bukus.index') }}" @class([
                             'rounded-md px-3 py-2 text-sm font-semibold',
@@ -61,7 +69,7 @@
 
             <main class="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
                 @if (session('success'))
-                    <div class="mb-8 border-l-4 border-forest bg-[#E7EFEA] px-4 py-3 text-sm text-forest" role="status">
+                    <div class="mb-8 border-l-4 border-forest bg-[#F3E8FF] px-4 py-3 text-sm text-forest" role="status">
                         {{ session('success') }}
                     </div>
                 @endif

@@ -26,7 +26,7 @@
                 </thead>
                 <tbody class="divide-y divide-border-warm/80">
                     @forelse ($bukus as $buku)
-                        <tr class="odd:bg-sand/35 hover:bg-[#E7EFEA]">
+                        <tr class="odd:bg-sand/35 hover:bg-[#F5F3FF]">
                             <td class="whitespace-nowrap px-5 py-4 font-mono text-xs text-muted">{{ $buku->isbn }}</td>
                             <td class="min-w-64 px-5 py-4 font-semibold leading-6 text-charcoal">{{ $buku->judul }}</td>
                             <td class="whitespace-nowrap px-5 py-4 text-charcoal/80">{{ $buku->penulis }}</td>

@@ -9,7 +9,10 @@
     <body class="min-h-screen bg-ivory text-charcoal">
         <main class="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 sm:px-10 lg:px-16 lg:py-12">
             <header class="flex items-center justify-between border-b border-border-warm pb-6">
-                <a href="{{ route('bukus.index') }}" class="font-display text-2xl font-semibold tracking-tight text-forest">SIPUS-Del</a>
+                <a href="{{ route('bukus.index') }}" class="flex items-center gap-3 font-display text-2xl font-semibold tracking-tight text-forest">
+                    <img src="{{ asset('images/logo-itdel.png') }}" alt="Logo Institut Teknologi Del" class="h-12 w-12 rounded bg-white object-contain p-0.5">
+                    <span>SIPUS-Del</span>
+                </a>
                 <span class="hidden text-xs font-semibold uppercase tracking-[0.2em] text-muted sm:block">Perpustakaan Del</span>
             </header>
 

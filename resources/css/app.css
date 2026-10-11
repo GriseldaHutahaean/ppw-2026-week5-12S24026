@@ -9,13 +9,13 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
     --font-display: Georgia, 'Times New Roman', serif;
-    --color-ivory: #F8F7F2;
-    --color-forest: #183D32;
-    --color-charcoal: #292D2A;
-    --color-brass: #B58A56;
-    --color-sand: #F2F0E9;
-    --color-border-warm: #E5E3DA;
-    --color-muted: #747770;
+    --color-ivory: #F8FAFC;
+    --color-forest: #4C1D95;
+    --color-charcoal: #1F2937;
+    --color-brass: #7C3AED;
+    --color-sand: #F5F3FF;
+    --color-border-warm: #E5E7EB;
+    --color-muted: #6B7280;
 }
 
 @layer base {
@@ -46,7 +46,7 @@
     input:focus-visible,
     select:focus-visible,
     textarea:focus-visible {
-        outline: 2px solid var(--color-brass);
+        outline: 2px solid var(--color-forest);
         outline-offset: 3px;
     }
 
