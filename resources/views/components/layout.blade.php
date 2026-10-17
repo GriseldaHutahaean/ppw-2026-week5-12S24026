@@ -37,10 +37,27 @@
                         <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"/><path d="M4 5.5A2.5 2.5 0 0 1 6.5 8H20"/></svg>
                         <span>Kategori</span>
                     </a>
+                    <a href="{{ route('peminjamans.index') }}" @class([
+                        'flex items-center gap-3 border-l-2 px-4 py-3 text-sm font-semibold',
+                        'border-brass bg-white/10 text-white' => request()->routeIs('peminjamans.*'),
+                        'border-transparent text-white/70 hover:border-white/40 hover:bg-white/10 hover:text-white' => ! request()->routeIs('peminjamans.*'),
+                    ]) @if (request()->routeIs('peminjamans.*')) aria-current="page" @endif>
+                        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>
+                        <span>Peminjaman</span>
+                    </a>
                 </nav>
 
-                <div class="mt-auto border-t border-white/15 pt-6 text-xs leading-5 text-white/55">
-                    Koleksi, pengetahuan, dan cerita untuk sivitas Del.
+                <div class="mt-auto border-t border-white/15 pt-6">
+                    @auth
+                        <p class="text-sm font-semibold text-white">{{ auth()->user()->email }}</p>
+                        <p class="mt-1 text-xs text-white/55">Login: {{ session('login_timestamp') }}</p>
+                        <form action="{{ route('logout') }}" method="POST" class="mt-4">
+                            @csrf
+                            <button type="submit" class="w-full rounded-md border border-white/20 px-4 py-2 text-left text-xs font-semibold text-white/80 hover:bg-white/10 hover:text-white">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="block rounded-md border border-brass px-4 py-2 text-center text-xs font-semibold text-brass hover:bg-white/10">Login Pustakawan</a>
+                    @endauth
                 </div>
             </div>
         </aside>
@@ -63,6 +80,11 @@
                             'bg-white/15 text-white' => request()->routeIs('kategoris.*'),
                             'text-white/70 hover:bg-white/10 hover:text-white' => ! request()->routeIs('kategoris.*'),
                         ])>Kategori</a>
+                        <a href="{{ route('peminjamans.index') }}" @class([
+                            'rounded-md px-3 py-2 text-sm font-semibold',
+                            'bg-white/15 text-white' => request()->routeIs('peminjamans.*'),
+                            'text-white/70 hover:bg-white/10 hover:text-white' => ! request()->routeIs('peminjamans.*'),
+                        ])>Peminjaman</a>
                     </nav>
                 </div>
             </header>
