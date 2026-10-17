@@ -11,9 +11,8 @@ SIPUS-Del (Sistem Informasi Perpustakaan) adalah aplikasi perpustakaan berbasis 
 - Pagination pada daftar buku dan kategori.
 - Notifikasi berhasil atau gagal setelah operasi tertentu.
 - Tampilan responsif menggunakan Blade dan Tailwind CSS.
-- Seeder untuk menyiapkan data contoh kategori dan buku.
-
-Aplikasi saat ini belum menyediakan pencarian, filter, login, transaksi peminjaman, pengembalian, atau perhitungan denda.
+- Seeder untuk menyiapkan akun pustakawan, kategori, buku, dan transaksi contoh.
+- Pencarian dan filter katalog, transaksi peminjaman, pengembalian, serta statistik sirkulasi.
 
 ## Teknologi yang Digunakan
 
@@ -176,6 +175,49 @@ routes/
 - `Kategori::bukus()` menggunakan relasi `hasMany`.
 - `Buku::kategori()` menggunakan relasi `belongsTo`.
 - Daftar buku menggunakan eager loading `Buku::with('kategori')` agar nama kategori dapat ditampilkan tanpa query relasi berulang.
+
+## Minggu 6
+
+Minggu 6 menambahkan autentikasi pustakawan, session database, cookie email terakhir, pencarian katalog, statistik, serta transaksi peminjaman dan pengembalian yang aman dengan transaksi database dan `lockForUpdate`.
+
+### Akun uji pustakawan
+
+- Email: `pustakawan@del.ac.id`
+- Password: `password123`
+
+### Menjalankan Minggu 6
+
+```powershell
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
+```
+
+Buat database MySQL bernama `ppw_week06`, lalu sesuaikan koneksi database di `.env` tanpa membagikan file tersebut. Setelah itu jalankan:
+
+```powershell
+php artisan migrate:fresh --seed
+npm install
+npm run build
+php artisan serve
+```
+
+### Relasi data
+
+```mermaid
+erDiagram
+    KATEGORIS ||--o{ BUKUS : memiliki
+    BUKUS ||--o{ PEMINJAMANS : dicatat
+```
+
+### Bukti pengujian
+
+Simpan screenshot hasil pengujian di folder [`docs/`](docs/). Bukti yang perlu dilengkapi:
+
+1. Peminjaman berhasil dan stok berkurang.
+2. Pengembalian berhasil dan stok bertambah.
+3. Peminjaman buku dengan stok 0 ditolak dan stok tetap (rollback).
+4. Pemeriksaan cookie `laravel_session` beratribut `HttpOnly` melalui DevTools.
 
 ## Pengembang
 
