@@ -66,6 +66,11 @@ class DatabaseSeeder extends Seeder
             ['isbn' => '9786022919014', 'judul' => 'Sejarah Nusantara', 'penulis' => 'Maya Sari', 'penerbit' => 'Mizan Publika', 'tahun_terbit' => 2022, 'kategori_id' => $kategoris['KAT-SEJ']->id, 'stok' => 4],
             ['isbn' => '9786022913450', 'judul' => 'Strategi Belajar Efektif', 'penulis' => 'Doni Simanjuntak', 'penerbit' => 'Gramedia Pustaka Utama', 'tahun_terbit' => 2021, 'kategori_id' => $kategoris['KAT-PEN']->id, 'stok' => 5],
             ['isbn' => '9786022917899', 'judul' => 'Cerita dari Danau Toba', 'penulis' => 'Nadia Hutapea', 'penerbit' => 'Bentang Pustaka', 'tahun_terbit' => 2020, 'kategori_id' => $kategoris['KAT-FIK']->id, 'stok' => 3],
+            ['isbn' => '9786022914566', 'judul' => 'Algoritma dan Struktur Data', 'penulis' => 'Budi Santoso', 'penerbit' => 'Penerbit Andi', 'tahun_terbit' => 2022, 'kategori_id' => $kategoris['KAT-TEK']->id, 'stok' => 4],
+            ['isbn' => '9786022915679', 'judul' => 'Ensiklopedia Sains Dasar', 'penulis' => 'Citra Dewi', 'penerbit' => 'Erlangga', 'tahun_terbit' => 2021, 'kategori_id' => $kategoris['KAT-ILM']->id, 'stok' => 2],
+            ['isbn' => '9786022916780', 'judul' => 'Pengantar Kebudayaan Indonesia', 'penulis' => 'Fajar Manurung', 'penerbit' => 'Mizan Publika', 'tahun_terbit' => 2019, 'kategori_id' => $kategoris['KAT-SEJ']->id, 'stok' => 3],
+            ['isbn' => '9786022918900', 'judul' => 'Metode Penelitian Pendidikan', 'penulis' => 'Gita Permata', 'penerbit' => 'Gramedia Pustaka Utama', 'tahun_terbit' => 2023, 'kategori_id' => $kategoris['KAT-PEN']->id, 'stok' => 2],
+            ['isbn' => '9786022919015', 'judul' => 'Kumpulan Cerita Pilihan', 'penulis' => 'Hana Siregar', 'penerbit' => 'Bentang Pustaka', 'tahun_terbit' => 2020, 'kategori_id' => $kategoris['KAT-FIK']->id, 'stok' => 3],
         ] as $data) {
             Buku::updateOrCreate(['isbn' => $data['isbn']], $data + ['sinopsis' => null]);
         }
