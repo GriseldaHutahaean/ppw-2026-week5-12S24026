@@ -219,6 +219,61 @@ Simpan screenshot hasil pengujian di folder [`docs/`](docs/). Bukti yang perlu d
 3. Peminjaman buku dengan stok 0 ditolak dan stok tetap (rollback).
 4. Pemeriksaan cookie `laravel_session` beratribut `HttpOnly` melalui DevTools.
 
+## Minggu 9 — Web Services & REST API
+
+Implementasi Minggu 9 menyediakan katalog REST API v1, autentikasi Bearer Token dengan Sanctum, transaksi peminjaman/pengembalian, konsumen OpenLibrary, serta endpoint SOAP terbatas untuk pemeriksaan status bebas pustaka. Spesifikasi kontraknya tersedia di [`docs/openapi-sipus-v1.yaml`](docs/openapi-sipus-v1.yaml).
+
+### Persiapan dan uji lokal
+
+Branch pengerjaan: `week9-rest-api`. Proyek ini menggunakan Laravel 13 dan PHP 8.3+; meskipun modul praktikum menyebut Laravel 11, implementasi mengikuti versi framework dan API yang benar-benar terpasang di repositori.
+
+```powershell
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan test
+php artisan serve
+```
+
+### REST API
+
+Endpoint katalog `GET /api/v1/bukus` dan detail `GET /api/v1/bukus/{id}` dapat diakses publik. Filter katalog meliputi `search`, `kategori_id`, `tersedia=1` atau `tersedia=0`, dan `sort` (misalnya `sort=-judul`). Respons buku menyertakan `_links`; tautan `pinjam_buku` hanya ada bila stok tersedia.
+
+Endpoint mutasi dan sirkulasi memerlukan header `Authorization: Bearer <token>`. Kredensial uji dari seeder:
+
+```text
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{"email":"pustakawan@del.ac.id","password":"password123"}
+```
+
+Gunakan `data.access_token` untuk memanggil `/api/v1/auth/me`, mutasi buku, daftar peminjaman, peminjaman baru, dan pengembalian. Contoh:
+
+```powershell
+curl.exe -H "Authorization: Bearer <token>" http://127.0.0.1:8000/api/v1/peminjamans
+```
+
+Kesalahan API menggunakan `application/problem+json` (RFC 7807), termasuk validasi `422`, konflik `409`, autentikasi `401`, dan resource tidak ditemukan `404`. Pengembalian dan peminjaman mengunci baris buku di dalam transaksi database; untuk pengujian concurrency riil gunakan database yang mendukung row-level locking (misalnya MySQL/PostgreSQL), sebab SQLite tidak menerapkan `SELECT ... FOR UPDATE` dengan cara yang sama.
+
+### SOAP legacy dan kelayakan layanan
+
+- `GET /soap/sipus.wsdl` menyediakan WSDL 1.1 minimal untuk operasi `CheckClearanceStatus`.
+- `POST /soap/sipus` menerima SOAP 1.1 XML berisi `nim_peminjam` dan menghitung transaksi berstatus `dipinjam`.
+- XML dibatasi ukurannya, diproses tanpa akses jaringan entitas eksternal, dan input tidak valid menghasilkan `soap:Fault`. Pengecualian CSRF hanya berlaku untuk path `soap/*`; route tetap hanya-baca.
+- SOAP masih layak sebagai adapter interoperabilitas bagi klien lama yang membutuhkan XML/WSDL, tetapi tidak disarankan sebagai API baru karena kontrak dan tooling lebih rumit. Untuk layanan baru, gunakan REST v1 dengan JSON, HATEOAS, bearer token, serta RFC 7807.
+- Implementasi SOAP latihan ini belum menyediakan WS-Security atau otorisasi identitas mahasiswa. Jangan mengekspos pemeriksaan NIM ke jaringan publik tanpa HTTPS, autentikasi, pembatasan laju, dan kebijakan privasi yang sesuai.
+
+### Pengujian cepat
+
+1. Jalankan `php artisan test` untuk tes katalog/filter, Bearer Token, kontrak RFC 7807, validasi PUT/PATCH, pencegahan peminjaman ganda, update stok, SOAP Fault, dan fallback OpenLibrary.
+2. Login melalui `POST /api/v1/auth/login`; pastikan token yang diterima dapat dipakai pada `GET /api/v1/auth/me`, lalu tidak berlaku lagi setelah `POST /api/v1/auth/logout`.
+3. Pinjam buku lewat `POST /api/v1/peminjamans` dengan `buku_id`, `nim_peminjam`, dan `nama_peminjam`; verifikasi stok berkurang satu. Alternatif HATEOAS `POST /api/v1/bukus/{id}/peminjamans` menerima payload yang sama tanpa `buku_id`.
+4. Kembalikan lewat `PATCH /api/v1/peminjamans/{id}/kembalikan`; verifikasi status `dikembalikan`, tanggal pengembalian, stok bertambah satu, dan tautan `kembalikan_buku` hilang.
+5. Untuk SOAP, kirim `Content-Type: text/xml` ke `/soap/sipus` dengan envelope SOAP dan elemen `nim_peminjam`; periksa `active_loans` serta `is_cleared`.
+6. Referensi eksternal membaca OpenLibrary dengan timeout 8 detik; ISBN tak dikenal atau gangguan koneksi menghasilkan fallback JSON yang eksplisit.
+
 ## Pengembang
 
 **Griselda Hutahaean**

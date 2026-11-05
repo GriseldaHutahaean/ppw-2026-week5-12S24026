@@ -4,11 +4,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\Soap\LibrarySoapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/soap/sipus.wsdl', [LibrarySoapController::class, 'wsdl'])->name('soap.wsdl');
+Route::post('/soap/sipus', [LibrarySoapController::class, 'handle'])->name('soap.sipus');
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->middleware('guest')->name('login');
