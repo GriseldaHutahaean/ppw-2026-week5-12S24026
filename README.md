@@ -249,11 +249,40 @@ Content-Type: application/json
 {"email":"pustakawan@del.ac.id","password":"password123"}
 ```
 
-Gunakan `data.access_token` untuk memanggil `/api/v1/auth/me`, mutasi buku, daftar peminjaman, peminjaman baru, dan pengembalian. Contoh:
+Jika kredensial benar, endpoint mengembalikan status `200 OK` dengan token Bearer dan data pengguna yang berhasil diautentikasi:
+
+```json
+{
+  "data": {
+    "token_type": "Bearer",
+    "access_token": "<token-hasil-login>",
+    "user": {
+      "id": 1,
+      "name": "Pustakawan Del",
+      "email": "pustakawan@del.ac.id"
+    }
+  },
+  "message": "Autentikasi berhasil."
+}
+```
+
+Nilai `access_token` pada contoh di atas sengaja disamarkan. Gunakan `data.access_token` dari respons aktual untuk memanggil `/api/v1/auth/me`, mutasi buku, daftar peminjaman, peminjaman baru, dan pengembalian. Contoh:
 
 ```powershell
 curl.exe -H "Authorization: Bearer <token>" http://127.0.0.1:8000/api/v1/peminjamans
 ```
+
+Bukti pengujian login menggunakan Postman:
+
+![Bukti login API berhasil melalui Postman](docs/postman-login.png)
+
+Bukti katalog publik berhasil diakses melalui `GET /api/v1/bukus`:
+
+![Bukti GET katalog buku melalui Postman](docs/postman-books-list.png)
+
+Bukti penambahan buku berhasil melalui `POST /api/v1/bukus` dengan respons `201 Created`:
+
+![Bukti POST tambah buku melalui Postman](docs/postman-create-book.png)
 
 Kesalahan API menggunakan `application/problem+json` (RFC 7807), termasuk validasi `422`, konflik `409`, autentikasi `401`, dan resource tidak ditemukan `404`. Pengembalian dan peminjaman mengunci baris buku di dalam transaksi database; untuk pengujian concurrency riil gunakan database yang mendukung row-level locking (misalnya MySQL/PostgreSQL), sebab SQLite tidak menerapkan `SELECT ... FOR UPDATE` dengan cara yang sama.
 
@@ -264,6 +293,14 @@ Kesalahan API menggunakan `application/problem+json` (RFC 7807), termasuk valida
 - XML dibatasi ukurannya, diproses tanpa akses jaringan entitas eksternal, dan input tidak valid menghasilkan `soap:Fault`. Pengecualian CSRF hanya berlaku untuk path `soap/*`; route tetap hanya-baca.
 - SOAP masih layak sebagai adapter interoperabilitas bagi klien lama yang membutuhkan XML/WSDL, tetapi tidak disarankan sebagai API baru karena kontrak dan tooling lebih rumit. Untuk layanan baru, gunakan REST v1 dengan JSON, HATEOAS, bearer token, serta RFC 7807.
 - Implementasi SOAP latihan ini belum menyediakan WS-Security atau otorisasi identitas mahasiswa. Jangan mengekspos pemeriksaan NIM ke jaringan publik tanpa HTTPS, autentikasi, pembatasan laju, dan kebijakan privasi yang sesuai.
+
+Bukti pengujian SOAP berhasil dengan respons `200 OK`:
+
+![Bukti SOAP CheckClearanceStatus berhasil melalui Postman](docs/postman-soap-success.png)
+
+Bukti SOAP Fault saat XML request tidak valid dengan respons `400 Bad Request`:
+
+![Bukti SOAP Fault melalui Postman](docs/postman-soap-fault.png)
 
 ### Pengujian cepat
 
