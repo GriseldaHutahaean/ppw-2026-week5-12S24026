@@ -1,0 +1,12 @@
+workspace:
+  id: c86a6f3a-938c-43f7-8135-37cc998e2e1f
+localResources:
+  specs:
+    - ../docs/openapi-sipus-v1.yaml
+cloudResources:
+  collections:
+    ../postman/collections/New Collection: 60065469-aad8b9a1-d550-4877-bb79-feef86a3c25c
+  specs:
+    ../docs/openapi-sipus-v1.yaml: 046a6d25-13d9-4e9b-81f6-b183d8f00d7a
+  globals:
+    ../postman/globals/workspace.globals.yaml: 7a8d798a-dea9-4d06-805b-44eeb3dfb141
